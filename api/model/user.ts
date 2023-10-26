@@ -1,6 +1,9 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import jwt from 'jsonwebtoken';
 import { config } from '../config';
+import { customAlphabet } from 'nanoid'
+
+const nanoid = customAlphabet('0123456789AQWXSCZEDCVFRTGBHYNJUIKLOPaqwxszedcvfrtgbnhyujmkiolp', 17);
 
 export interface UserInput {
   fullname: string;
@@ -17,6 +20,10 @@ export interface UserDocument extends UserInput, Document {
 
 const UserSchema: Schema = new mongoose.Schema(
   {
+    code: {
+      type: String,
+      default: () => 'usr_' + nanoid(), 
+    },
     fullname: {
       type: String,
       required: true,
@@ -48,4 +55,4 @@ UserSchema.methods.generateAuthToken = function generatedToken() {
   return token;
 };
 
-export default mongoose.model('User', UserSchema);
+export default mongoose.model('User', UserSchema); 
