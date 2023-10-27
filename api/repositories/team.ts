@@ -23,12 +23,12 @@ export const teamRepository = {
   },
 
   async deleteTeam(code: string) {
-    const team = Team.deleteOne({ code })
+    const team = await Team.deleteOne({ code })
     return team
   },
 
   async listTeams() {
-    const team = Team.find()
+    const team = await Team.find()
   // if no team
     return team
   },
