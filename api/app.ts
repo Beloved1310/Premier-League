@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 import user from './routes/user';
+import team from './routes/team';
 
 import cors from 'cors';
 import { config } from 'dotenv';
@@ -24,5 +25,6 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/user', user);
+app.use('/team', team)
 
 export default app;

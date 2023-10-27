@@ -1,3 +1,4 @@
+import { string } from 'joi';
 import mongoose, { Schema, Document } from 'mongoose';
 
 // Define the interface for a fixture
@@ -22,6 +23,10 @@ const FixtureSchema: Schema = new Schema({
   kickoffTime: {
     type: Date,
     required: true,
+  },
+  status: {
+    type: string,
+    default: 'pending'
   },
   result: {
     type: String,

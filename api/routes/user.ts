@@ -1,6 +1,5 @@
 import express from 'express';
 import { asyncErrorhandling } from '../middleware/async';
-// import { auth } from '../middleware/auth';
 import { userController } from '../controller/user';
 
 
