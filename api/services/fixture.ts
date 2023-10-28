@@ -5,28 +5,52 @@ import NotFoundError from '../utilis/not-found-error'
 
 export const fixtureService = {
   async createFixture(payload: FixtureInput) {
-    const Fixture = await fixtureRepository.getOneFixture({homeTeam: payload.homeTeam});
-    if (Fixture) throw new ExistsError('Fixture')
-    const createFixture = await fixtureRepository.createFixture(payload);
+    const fixture= await fixtureRepository.getOneFixture({homeTeam: payload.homeTeam});
+    if (fixture) throw new ExistsError('Fixture')
+    const createFixture= await fixtureRepository.createFixture(payload);
     return createFixture
   },
 
   async updateFixture(code: string, updateFields: {}) {
-    const Fixture = await fixtureRepository.getOneFixture({code})
-    if (!Fixture) throw new NotFoundError('Fixture')
-    const createFixture = await fixtureRepository.updateFixture(code, updateFields)
+    const fixture= await fixtureRepository.getOneFixture({code})
+    if (!fixture) throw new NotFoundError('Fixture')
+    const createFixture= await fixtureRepository.updateFixture(code, updateFields)
     return createFixture
   },
 
   async deleteFixture(code: string) {
-    const Fixture = await fixtureRepository.getOneFixture({code})
-    if (!Fixture) throw new NotFoundError('Fixture')
-    const deleteFixture = await fixtureRepository.deleteFixture(code)
+    const fixture= await fixtureRepository.getOneFixture({code})
+    if (!fixture) throw new NotFoundError('Fixture')
+    const deleteFixture= await fixtureRepository.deleteFixture(code)
     return deleteFixture
   },
 
-  async listFixtures() {
-    const listFixtures = await fixtureRepository.listFixtures()
+  async getFixture(code: string) {
+    const fixture= await fixtureRepository.getOneFixture({code})
+    if (!fixture) throw new NotFoundError('Fixture')
+    return fixture
+  },
+  async listFixtures(queryParams: any) {
+    if (typeof queryParams.awayTeam === 'string') {
+      queryParams.awayTeam = { $regex: queryParams.awayTeam, $options: 'i' }
+    }
+
+    if (typeof queryParams.homeTeam === 'string') {
+      queryParams.homeTeam = { $regex: queryParams.homeTeam, $options: 'i' }
+    }
+
+    if (typeof queryParams.kickoffTime === 'string') {
+      queryParams.kickoffTime = { $regex: queryParams.kickoffTime, $options: 'i' }
+    }
+
+    if (typeof queryParams.status === 'string') {
+      queryParams.status = { $regex: queryParams.status, $options: 'i' }
+    }
+
+    if (typeof queryParams.result === 'string') {
+      queryParams.result = { $regex: queryParams.result, $options: 'i' }
+    }
+    const listFixtures = await fixtureRepository.listFixtures(queryParams)
     return listFixtures
   },
 }

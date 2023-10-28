@@ -1,15 +1,17 @@
 import express from 'express';
 import { asyncErrorhandling } from '../middleware/async';
 import { auth } from '../middleware/auth';
+import { isAdmin } from '../middleware/isAdmin';
 import { teamController } from '../controller/team';
 
 
 const router = express.Router();
 
-router.post('/', auth, asyncErrorhandling(teamController.createTeam));
-router.get('/', auth,asyncErrorhandling(teamController.listTeams));
-router.put('/:code',auth, asyncErrorhandling(teamController.updateTeam));
-router.delete('/:code', auth, asyncErrorhandling(teamController.deleteTeam));
+router.post('/', auth, isAdmin, asyncErrorhandling(teamController.createTeam));
+router.get('/:code', auth,isAdmin,asyncErrorhandling(teamController.viewTeam));
+router.put('/:code',auth, isAdmin,asyncErrorhandling(teamController.updateTeam));
+router.delete('/:code', auth,isAdmin, asyncErrorhandling(teamController.deleteTeam));
+router.get('/', asyncErrorhandling(teamController.listTeams));
 
 
 export default router;

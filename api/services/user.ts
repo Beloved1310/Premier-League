@@ -8,8 +8,7 @@ import UnprocessableError from '../utilis/not-processed-error'
 export const userService = {
   async createUser(createUser: UserInputRegister) {
     const user = await userRepository.getOneUser(createUser.email)
-    if (user)
-      throw new ValidationError('User already registered. Proceed to login')
+    if (user)throw new ValidationError('User already registered. Proceed to login')
     const salt = await bcrypt.genSalt(10)
     createUser.password = await bcrypt.hash(createUser.password, salt)
     const savedUser = await userRepository.createUser(createUser)

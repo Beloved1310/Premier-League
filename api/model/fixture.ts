@@ -1,5 +1,9 @@
 import { string } from 'joi';
 import mongoose, { Schema, Document } from 'mongoose';
+import { customAlphabet } from 'nanoid'
+
+const nanoid = customAlphabet('0123456789AQWXSCZEDCVFRTGBHYNJUIKLOPaqwxszedcvfrtgbnhyujmkiolp', 17);
+
 
 // Define the interface for a fixture
 export interface IFixture extends Document {
@@ -12,6 +16,10 @@ export interface IFixture extends Document {
 
 // Create a schema for the fixture
 const FixtureSchema: Schema = new Schema({
+  code: {
+    type: String,
+    default: () => 'fix_' + nanoid(), 
+  },
   homeTeam: {
     type: String,
     required: true,
@@ -25,7 +33,7 @@ const FixtureSchema: Schema = new Schema({
     required: true,
   },
   status: {
-    type: string,
+    type: String,
     default: 'pending'
   },
   result: {

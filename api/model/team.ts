@@ -20,4 +20,8 @@ const TeamSchema: Schema = new Schema({
   founded: { type: Number, required: true },
 });
 
+TeamSchema.index({ name: 1 });
+TeamSchema.index({ country: 1 });
+TeamSchema.index({ founded: 1 });
+
 export default mongoose.model<ITeam>('Team', TeamSchema);

@@ -26,8 +26,8 @@ describe('teamService', () => {
       name: 'Manchester United',
       country: 'England',
       founded: 1990,
-    };
-    (teamRepository.createTeam as jest.Mock).mockResolvedValue({
+    }
+    ;(teamRepository.createTeam as jest.Mock).mockResolvedValue({
       _id: '1',
       ...payload,
     })
@@ -45,8 +45,8 @@ describe('teamService', () => {
       name: 'Manchester United',
       country: 'England',
       founded: 1990,
-    };
-    (teamRepository.createTeam as jest.Mock).mockResolvedValue({
+    }
+    ;(teamRepository.createTeam as jest.Mock).mockResolvedValue({
       _id: '1',
       ...payload,
     })
@@ -69,9 +69,9 @@ describe('teamService', () => {
       name: 'Manchester United',
       country: 'England',
       founded: 1990,
-    };
-    (teamRepository.getOneTeam as jest.Mock).mockResolvedValue(existingTeam);
-    (teamRepository.updateTeam as jest.Mock).mockResolvedValue({
+    }
+    ;(teamRepository.getOneTeam as jest.Mock).mockResolvedValue(existingTeam)
+    ;(teamRepository.updateTeam as jest.Mock).mockResolvedValue({
       nModified: 1,
     })
 
@@ -83,16 +83,16 @@ describe('teamService', () => {
   })
 
   it('deleteTeam - should delete an existing team', async () => {
-    const code = createdTeamCode; // Use the code of the created team
+    const code = createdTeamCode // Use the code of the created team
 
-    (teamRepository.getOneTeam as jest.Mock).mockResolvedValue({
+    ;(teamRepository.getOneTeam as jest.Mock).mockResolvedValue({
       _id: '1',
       code,
       name: 'Manchester United',
       country: 'England',
       founded: 1990,
-    });
-    (teamRepository.deleteTeam as jest.Mock).mockResolvedValue({
+    })
+    ;(teamRepository.deleteTeam as jest.Mock).mockResolvedValue({
       deletedCount: 1,
     })
 
@@ -104,9 +104,9 @@ describe('teamService', () => {
   })
 
   it('deleteTeam - should throw an error if the team does not exist', async () => {
-    const code = 'NonExistentCode';
+    const code = 'NonExistentCode'
 
-    (teamRepository.getOneTeam as jest.Mock).mockResolvedValue(null)
+    ;(teamRepository.getOneTeam as jest.Mock).mockResolvedValue(null)
 
     try {
       await teamService.deleteTeam(code)
@@ -117,7 +117,8 @@ describe('teamService', () => {
   })
 
   it('listTeams - should return a list of teams', async () => {
-    const teams = [
+    // Define the expected teams to be returned by the mock
+    const expectedTeams = [
       {
         _id: '1',
         code: 'tem_abc123',
@@ -132,9 +133,30 @@ describe('teamService', () => {
         country: 'Country 2',
         founded: 2010,
       },
-    ];
-    (teamRepository.listTeams as jest.Mock).mockResolvedValue(teams)
-    const result = await teamService.listTeams()
-    expect(result).toEqual(teams)
+    ]
+
+    // Mock the teamRepository.listTeams function to return the expected teams
+    ;(teamRepository.listTeams as jest.Mock).mockResolvedValue({
+      team: expectedTeams,
+      meta: {
+        total: expectedTeams.length,
+        page: 1,
+        perPage: expectedTeams.length,
+        hasMore: false,
+        nextPage: null,
+      },
+    })
+
+    // Provide some sample queryParams
+    const queryParams = {
+      name: 'Manchester United',
+    }
+
+    // Call the listTeams function with the provided queryParams
+    const result = await teamService.listTeams(queryParams)
+
+    // Use jest matchers to make assertions
+    expect(result.team).toEqual(expectedTeams) // Check if the result's team property matches the expected teams
+    expect(teamRepository.listTeams).toHaveBeenCalledWith(queryParams) // Check if listTeams was called with the provided queryParams
   })
 })

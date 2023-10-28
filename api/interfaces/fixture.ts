@@ -1,5 +1,6 @@
 export interface FixtureInput {
-    homeTeam: string,
-    awayTeam: string,
-    kickoffTime: string,
-  }
+  code? :string
+  homeTeam: string,
+  awayTeam: string,
+  kickoffTime: Date,
+}

@@ -6,6 +6,7 @@ export const userValidation = {
     fullname: Joi.string().trim().required(),
     email: Joi.string().email().required(),
     password: Joi.string().pattern(passwordRegex).max(70).messages({
+      "string.pattern.base": "Password must contain a capital/small letter, symbol and number",
       "string.pattern.match": '"password" must be stronger',
     }).required(),
   }),

@@ -23,4 +23,3 @@ export const userController = {
     return ResponseService.success(res, 'Login Successful', data);
   },
 }
-

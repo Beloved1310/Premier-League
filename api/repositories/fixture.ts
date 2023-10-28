@@ -2,12 +2,13 @@ import Fixture from '../model/fixture'
 
 export const fixtureRepository = {
   async getOneFixture(item: {}) {
-    const foundFixture = await Fixture.findOne( item )
+    const foundFixture = await Fixture.findOne( item ).select('-_id -__v')
     return foundFixture
   },
   async createFixture(createFixture: {}) {
     const fixture = await Fixture.create(createFixture)
-    return Fixture
+    const { _id, __v, ...data } = fixture.toObject();
+    return data
   },
 
   async updateFixture(code: string, updateFields: {}) {
@@ -27,9 +28,27 @@ export const fixtureRepository = {
     return deleteFixture
   },
 
-  async listFixtures() {
-    const fixtures =  await Fixture.find()
-  // if no Fixture
-    return fixtures
-  },
+  async listFixtures(queryParams :any) {
+    const perPage = 10;
+    const page = parseInt(queryParams.page as string) || 1;
+    const skip = (page - 1) * perPage;
+
+    const [fixture, total] = await Promise.all([
+        Fixture.find(queryParams)
+            .skip(skip)
+            .limit(perPage)
+            .select('-_id -__v')
+            .exec(),
+        Fixture.countDocuments(queryParams).exec(),
+    ]);
+    const meta = {
+      total,
+      page,
+      perPage,
+      hasMore: total > page * perPage,
+      nextPage: total > page * perPage ? page + 1 : null,
+  };
+
+  return { fixture, meta };
+  }
 }
