@@ -1,6 +1,5 @@
 import { fixtureService } from '../api/services/fixture'
 import { FixtureInput } from '../api/interfaces/fixture'
-import ExistsError from '../api/utilis/exists-error'
 import NotFoundError from '../api/utilis/not-found-error'
 import { fixtureRepository } from '../api/repositories/fixture'
 import { teamRepository } from '../api/repositories/team'

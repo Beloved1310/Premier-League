@@ -1,5 +1,4 @@
 import { userRepository } from '../repositories/user'
-import { Response } from 'express'
 import bcrypt from 'bcrypt'
 import { UserInputRegister, UserInput } from '../interfaces/user'
 import ValidationError from '../utilis/validation-error'
