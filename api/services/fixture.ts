@@ -1,12 +1,19 @@
 import { fixtureRepository } from '../repositories/fixture'
+import { teamRepository } from '../repositories/team'
 import { FixtureInput } from '../interfaces/fixture'
 import ExistsError from '../utilis/exists-error'
 import NotFoundError from '../utilis/not-found-error'
 
 export const fixtureService = {
   async createFixture(payload: FixtureInput) {
-    const fixture= await fixtureRepository.getOneFixture({homeTeam: payload.homeTeam});
-    if (fixture) throw new ExistsError('Fixture')
+    const fixture = await teamRepository.getOneTeam({name: payload.homeTeam});
+    if (!fixture) throw new NotFoundError('Home Team Fixture')
+    payload.homeTeam  = fixture._id
+
+    const awayfixture = await teamRepository.getOneTeam({name: payload.awayTeam});
+    if (!awayfixture) throw new NotFoundError('Away Team Fixture')
+    payload.awayTeam  = awayfixture._id
+
     const createFixture= await fixtureRepository.createFixture(payload);
     return createFixture
   },
@@ -30,26 +37,39 @@ export const fixtureService = {
     if (!fixture) throw new NotFoundError('Fixture')
     return fixture
   },
-  async listFixtures(queryParams: any) {
-    if (typeof queryParams.awayTeam === 'string') {
-      queryParams.awayTeam = { $regex: queryParams.awayTeam, $options: 'i' }
-    }
-
-    if (typeof queryParams.homeTeam === 'string') {
-      queryParams.homeTeam = { $regex: queryParams.homeTeam, $options: 'i' }
-    }
-
-    if (typeof queryParams.kickoffTime === 'string') {
-      queryParams.kickoffTime = { $regex: queryParams.kickoffTime, $options: 'i' }
-    }
-
+  async listPendingFixtures(queryParams: any) {
     if (typeof queryParams.status === 'string') {
       queryParams.status = { $regex: queryParams.status, $options: 'i' }
     }
+    const listFixtures = await fixtureRepository.listPendingFixtures(queryParams)
+    return listFixtures
+  },
 
-    if (typeof queryParams.result === 'string') {
-      queryParams.result = { $regex: queryParams.result, $options: 'i' }
+  async listCompletedFixtures(queryParams: any) {
+    if (typeof queryParams.status === 'string') {
+      queryParams.status = { $regex: queryParams.status, $options: 'i' }
     }
+    const listFixtures = await fixtureRepository.listCompletedFixtures(queryParams)
+    return listFixtures
+  },
+  async listFixtures(queryParams: any) {
+    if (typeof queryParams.awayTeam === 'string') {
+      const awayTeamFixture = await teamRepository.getOneTeam({ name: { $regex: new RegExp(queryParams.awayTeam, 'i') } });
+      queryParams.awayTeam = awayTeamFixture?._id;
+  }
+  
+  if (typeof queryParams.homeTeam === 'string') {
+      const homeTeamFixture = await teamRepository.getOneTeam({ name: { $regex: new RegExp(queryParams.homeTeam, 'i') } });
+      queryParams.homeTeam = homeTeamFixture?._id;
+  }  
+
+  if (typeof queryParams.kickoffTime === 'string') {
+      queryParams.kickoffTime = { $eq: queryParams.kickoffTime.toLowerCase() };
+  }
+
+  if (typeof queryParams.result === 'string') {
+      queryParams.result = { $eq: queryParams.result.toLowerCase() };
+  }
     const listFixtures = await fixtureRepository.listFixtures(queryParams)
     return listFixtures
   },

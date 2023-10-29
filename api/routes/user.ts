@@ -1,12 +1,10 @@
-import express from 'express';
-import { asyncErrorhandling } from '../middleware/async';
-import { userController } from '../controller/user';
+import express from 'express'
+import { asyncErrorhandling } from '../middleware/async'
+import { userController } from '../controller/user'
 
+const router = express.Router()
 
-const router = express.Router();
+router.post('/register', asyncErrorhandling(userController.register))
+router.post('/login', asyncErrorhandling(userController.login))
 
-router.post('/register', asyncErrorhandling(userController.register));
-router.post('/login', asyncErrorhandling(userController.login));
-
-
-export default router;
+export default router

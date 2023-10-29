@@ -41,11 +41,12 @@ export const teamController = {
       )
     } else {
       const team = await teamService.getTeam(code)
+      const { _id , ...data} = team.toObject()
 
       // Cache the team data
-      await RedisService.setJson(`team:${code}`, team)
+      await RedisService.setJson(`team:${code}`, data)
 
-      return ResponseService.success(res, 'Team Successfully Retrieved', team)
+      return ResponseService.success(res, 'Team Successfully Retrieved', data)
     }
   },
 

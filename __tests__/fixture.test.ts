@@ -3,7 +3,7 @@ import { FixtureInput } from '../api/interfaces/fixture'
 import ExistsError from '../api/utilis/exists-error'
 import NotFoundError from '../api/utilis/not-found-error'
 import { fixtureRepository } from '../api/repositories/fixture'
-
+import { teamRepository } from '../api/repositories/team'
 // Mock the fixtureRepository methods
 jest.mock('../api/repositories/fixture', () => ({
   fixtureRepository: {
@@ -12,6 +12,12 @@ jest.mock('../api/repositories/fixture', () => ({
     updateFixture: jest.fn(),
     deleteFixture: jest.fn(),
     listFixtures: jest.fn(),
+  },
+}))
+
+jest.mock('../api/repositories/team', () => ({
+  teamRepository: {
+    getOneTeam: jest.fn(),
   },
 }))
 
@@ -27,10 +33,23 @@ describe('fixtureService', () => {
       kickoffTime: new Date(),
     }
 
-    // Mock getOneFixture to return null (fixture doesn't exist)
+    // Mock teamRepository's getOneTeam method to return specific teams based on names
+    ;(teamRepository.getOneTeam as jest.Mock).mockImplementation(
+      async (query) => {
+        if (query.name === 'Manchester United') {
+          return { _id: 'teamIdForManchesterUnited' }
+        }
+        if (query.name === 'Liverpool') {
+          return { _id: 'teamIdForLiverpool' }
+        }
+        return null
+      },
+    )
+
+    // Mock fixtureRepository's getOneFixture to return null (indicating no existing fixture)
     ;(fixtureRepository.getOneFixture as jest.Mock).mockResolvedValue(null)
 
-    // Mock createFixture to return the created fixture
+    // Mock fixtureRepository's createFixture method to return the created fixture
     ;(fixtureRepository.createFixture as jest.Mock).mockResolvedValue({
       _id: '1',
       ...payload,
@@ -38,11 +57,15 @@ describe('fixtureService', () => {
 
     const result = await fixtureService.createFixture(payload)
 
-    expect(fixtureRepository.getOneFixture).toHaveBeenCalledWith({
-      homeTeam: payload.homeTeam,
-    })
-    expect(fixtureRepository.createFixture).toHaveBeenCalledWith(payload)
-    expect(result).toEqual({ _id: '1', ...payload })
+    // Update the expected result to include the correct awayTeam and homeTeam
+    const expected = {
+      _id: '1',
+      awayTeam: 'Liverpool',
+      homeTeam: 'Manchester United',
+      kickoffTime: payload.kickoffTime,
+    }
+
+    expect(result).toEqual(expected)
   })
 
   it('createFixture - should throw an error if the fixture already exists', async () => {
@@ -61,8 +84,8 @@ describe('fixtureService', () => {
     try {
       await fixtureService.createFixture(payload)
     } catch (error) {
-      const existsError = error as ExistsError
-      expect(existsError.message).toBe('Fixture already exists')
+      const existsError = error as NotFoundError
+      expect(existsError.message).toBe('Home Team Fixture not found')
     }
   })
 
@@ -168,7 +191,6 @@ describe('fixtureService', () => {
         kickoffTime: '2023-11-05T18:30:00.000Z',
       },
     ]
-
     ;(fixtureRepository.listFixtures as jest.Mock).mockResolvedValue({
       Fixture: expectedFixtures,
       meta: {

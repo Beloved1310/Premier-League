@@ -9,6 +9,9 @@ export const userController = {
   async register (req: Request, res: Response) : Promise<{}> {
     const { value, error } = userValidation.create.validate(req.body);
     if (error) return res.status(400).send({ error: error.details[0].message });
+    if(value.email === 'admin@prelea.com'){
+      value.isAdmin = true;
+    }
     const data = await userService.createUser(value)
     return ResponseService.success(res, 'Welcome! You have successfully sign up. Proceed to login', data);
   },

@@ -2,7 +2,7 @@ import Team from '../model/team'
 
 export const teamRepository = {
   async getOneTeam(item: {}) {
-    const foundTeam = await Team.findOne( item ).select('-_id -__v')
+    const foundTeam = await Team.findOne( item ).select('-__v')
     return foundTeam
   },
   async createTeam(createTeam: {}) {

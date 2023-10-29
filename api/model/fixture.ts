@@ -20,14 +20,16 @@ const FixtureSchema: Schema = new Schema({
     type: String,
     default: () => 'fix_' + nanoid(), 
   },
-  homeTeam: {
-    type: String,
-    required: true,
-  },
-  awayTeam: {
-    type: String,
-    required: true,
-  },
+  homeTeam: 
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Team',
+    },
+    awayTeam: 
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Team',
+    },
   kickoffTime: {
     type: Date,
     required: true,
