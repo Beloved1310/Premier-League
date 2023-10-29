@@ -13,8 +13,8 @@ const TeamSchema = new mongoose_1.Schema({
     country: { type: String, required: true },
     founded: { type: Number, required: true },
 });
-TeamSchema.index({ name: 1 });
-TeamSchema.index({ country: 1 });
-TeamSchema.index({ founded: 1 });
+TeamSchema.index({ name: 1, country: 1 });
+TeamSchema.index({ country: 1, founded: 1 });
+TeamSchema.index({ name: 1 }, { unique: true });
 exports.default = mongoose_1.default.model('Team', TeamSchema);
 //# sourceMappingURL=team.js.map
