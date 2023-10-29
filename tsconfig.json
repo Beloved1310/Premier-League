@@ -19,12 +19,12 @@
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
   "include": ["global.d.ts", "./api/**/*"],
-  "exclude": [
-    "node_modules",
-    "./api/**/*.spec.ts",
-    "./api/jest.setup.redis-mock.js",
-    "dist",
-    "templates",
-    "__tests__"
-  ]
+  // "exclude": [
+  //   "node_modules",
+  //   "./api/**/*.spec.ts",
+  //   "./api/jest.setup.redis-mock.js",
+  //   "dist",
+  //   "templates",
+  //   "__tests__"
+  // ]
 }
