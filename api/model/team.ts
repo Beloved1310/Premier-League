@@ -3,7 +3,7 @@ import { customAlphabet } from 'nanoid'
 
 const nanoid = customAlphabet('0123456789AQWXSCZEDCVFRTGBHYNJUIKLOPaqwxszedcvfrtgbnhyujmkiolp', 17);
 
-// Define the interface for a fixture
+// Define the interface for a team
 export interface ITeam extends Document {
   name: string;
   country: string;
@@ -20,8 +20,10 @@ const TeamSchema: Schema = new Schema({
   founded: { type: Number, required: true },
 });
 
-TeamSchema.index({ name: 1 });
-TeamSchema.index({ country: 1 });
-TeamSchema.index({ founded: 1 });
+
+TeamSchema.index({ name: 1, country: 1 });
+TeamSchema.index({ country: 1, founded: 1 });
+
+TeamSchema.index({ name: 1 }, { unique: true });
 
 export default mongoose.model<ITeam>('Team', TeamSchema);
