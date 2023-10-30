@@ -40,16 +40,18 @@ exports.teamService = {
         if (typeof queryParams.founded === 'string') {
             queryParams.founded = parseInt(queryParams.founded);
         }
-        // if (typeof queryParams.countries === 'string') {
-        //   queryParams.countries = { $regex: queryParams.countries, $options: 'i' }
-        // }
-        if (Array.isArray(queryParams.countries) ||
-            typeof queryParams.countries === 'string') {
-            const countries = Array.isArray(queryParams.countries)
-                ? queryParams.countries
-                : [queryParams.countries];
-            queryParams.country = { $in: countries };
+        if (typeof queryParams.countries === 'string') {
+            queryParams.countries = { $regex: queryParams.countries, $options: 'i' };
         }
+        // if (
+        //   Array.isArray(queryParams.countries) ||
+        //   typeof queryParams.countries === 'string'
+        // ) {
+        //   const countries = Array.isArray(queryParams.countries)
+        //     ? queryParams.countries
+        //     : [queryParams.countries]
+        //   queryParams.country = { $in: countries }
+        // }
         const listTeams = await team_1.teamRepository.listTeams(queryParams);
         return listTeams;
     },

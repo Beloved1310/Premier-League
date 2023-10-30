@@ -5,33 +5,37 @@ const tslib_1 = require("tslib");
 const fixture_1 = tslib_1.__importDefault(require("../model/fixture"));
 exports.fixtureRepository = {
     async getOneFixture(item) {
-        const foundFixture = await fixture_1.default.findOne(item).select('-_id -__v')
+        const foundFixture = await fixture_1.default.findOne(item)
+            .select('-_id -__v')
             .populate({
             path: 'homeTeam',
-            select: '-_id -__v'
+            select: '-_id -__v',
         })
             .populate({
             path: 'awayTeam',
-            select: '-_id -__v'
+            select: '-_id -__v',
         });
         return foundFixture;
     },
     async createFixture(createFixture) {
         const fixture = await fixture_1.default.create(createFixture);
-        await fixture.populate({
+        await fixture
+            .populate({
             path: 'homeTeam',
-            select: '-_id -__v'
-        }).populate({
+            select: '-_id -__v',
+        })
+            .populate({
             path: 'awayTeam',
-            select: '-_id -__v'
-        }).execPopulate();
+            select: '-_id -__v',
+        })
+            .execPopulate();
         const { _id, __v, ...data } = fixture.toObject();
         return data;
     },
     async updateFixture(code, updateFields) {
         const updateFixture = await fixture_1.default.updateOne({ code }, {
             $set: {
-                ...updateFields
+                ...updateFields,
             },
         });
         return updateFixture;
@@ -45,20 +49,20 @@ exports.fixtureRepository = {
         const page = parseInt(queryParams.page) || 1;
         const skip = (page - 1) * perPage;
         const [fixture, total] = await Promise.all([
-            fixture_1.default.find({ status: "pending" })
+            fixture_1.default.find({ status: 'pending' })
                 .skip(skip)
                 .limit(perPage)
                 .select('-_id -__v')
                 .populate({
                 path: 'homeTeam',
-                select: '-_id -__v'
+                select: '-_id -__v',
             })
                 .populate({
                 path: 'awayTeam',
-                select: '-_id -__v'
+                select: '-_id -__v',
             })
                 .exec(),
-            fixture_1.default.countDocuments({ status: "pending" }).exec(),
+            fixture_1.default.countDocuments({ status: 'pending' }).exec(),
         ]);
         const meta = {
             total,
@@ -74,20 +78,20 @@ exports.fixtureRepository = {
         const page = parseInt(queryParams.page) || 1;
         const skip = (page - 1) * perPage;
         const [fixture, total] = await Promise.all([
-            fixture_1.default.find({ status: "completed" })
+            fixture_1.default.find({ status: 'completed' })
                 .skip(skip)
                 .limit(perPage)
                 .select('-_id -__v')
                 .populate({
                 path: 'homeTeam',
-                select: '-_id -__v'
+                select: '-_id -__v',
             })
                 .populate({
                 path: 'awayTeam',
-                select: '-_id -__v'
+                select: '-_id -__v',
             })
                 .exec(),
-            fixture_1.default.countDocuments({ status: "completed" }).exec(),
+            fixture_1.default.countDocuments({ status: 'completed' }).exec(),
         ]);
         const meta = {
             total,
@@ -109,11 +113,11 @@ exports.fixtureRepository = {
                 .select('-_id -__v')
                 .populate({
                 path: 'homeTeam',
-                select: '-_id -__v'
+                select: '-_id -__v',
             })
                 .populate({
                 path: 'awayTeam',
-                select: '-_id -__v'
+                select: '-_id -__v',
             })
                 .exec(),
             fixture_1.default.countDocuments(queryParams).exec(),
@@ -126,6 +130,6 @@ exports.fixtureRepository = {
             nextPage: total > page * perPage ? page + 1 : null,
         };
         return { fixture, meta };
-    }
+    },
 };
 //# sourceMappingURL=fixture.js.map

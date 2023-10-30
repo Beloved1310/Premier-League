@@ -1,18 +1,13 @@
 import Redis from 'ioredis';
+import createClient from 'redis'
+import {log, Log} from '../utilis/logger'
 
-const client = new Redis({
-  host: process.env.REDIS_HOST,
-  // port: parseInt(process.env.REDIS_PORT),
-});
+const client = Redis.createClient();
 
 client.on('error', (err) => console.log(err));
-client.on('connect', () => console.log('Redis connected'));
+client.on('connect', () =>  log(Log.bg.green, "Redis connected"));
 
 export const RedisService = {
-
-  async getUserByEmail(email: string){
-    
-  },
   async setJson(key: string, value: any): Promise<any> {
     const jsonValue = JSON.stringify(value);
     await client.set(key, jsonValue, 'EX', 3600); // Set a 1-hour expiration time (adjust as needed)
@@ -30,3 +25,5 @@ export const RedisService = {
     return result;
   },
 };
+
+

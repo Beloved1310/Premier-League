@@ -16,7 +16,7 @@ exports.teamRepository = {
     async updateTeam(code, updateFields) {
         const team = await team_1.default.updateOne({ code }, {
             $set: {
-                ...updateFields
+                ...updateFields,
             },
         });
         return team;

@@ -1,4 +1,4 @@
-const Joi = require("joi");
+const Joi = require('joi')
 
 export const fixtureValidation = {
   create: Joi.object({
@@ -10,9 +10,12 @@ export const fixtureValidation = {
     homeTeam: Joi.string().optional().trim(),
     awayTeam: Joi.string().optional().trim(),
     status: Joi.string().optional().trim(),
-    result: Joi.string().regex(/^[A-Za-z\s-]+ \d+ - \d+ [A-Za-z\s-]+$/).messages({
-      'string.pattern.base': 'Invalid result format. The format should be "Team1 Score - Score Team2".'
-    }),
-    kickoffTime: Joi.number().optional()
+    result: Joi.string()
+      .regex(/^[A-Za-z\s-]+ \d+ - \d+ [A-Za-z\s-]+$/)
+      .messages({
+        'string.pattern.base':
+          'Invalid result format. The format should be "Team1 Score - Score Team2".',
+      }),
+    kickoffTime: Joi.number().optional(),
   }),
-};
+}

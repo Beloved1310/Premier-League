@@ -1,7 +1,6 @@
 import { fixtureRepository } from '../repositories/fixture'
 import { teamRepository } from '../repositories/team'
 import { FixtureInput } from '../interfaces/fixture'
-import ExistsError from '../utilis/exists-error'
 import NotFoundError from '../utilis/not-found-error'
 
 export const fixtureService = {

@@ -1,14 +1,14 @@
-const Joi = require("joi");
+const Joi = require('joi')
 
-export const teamValidation = {
+export const teamValidation : any = {
   create: Joi.object({
     name: Joi.string().required().trim(),
     country: Joi.string().required().trim(),
-    founded: Joi.number().required()
+    founded: Joi.number().required(),
   }),
   update: Joi.object({
     name: Joi.string().optional().trim(),
     country: Joi.string().optional().trim(),
-    founded: Joi.number().optional()
+    founded: Joi.number().optional(),
   }),
-};
+}

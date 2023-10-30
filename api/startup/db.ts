@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { config } from '../config';
+import {log, Log} from '../utilis/logger'
 
 const { MONGODBURI } = config;
 
@@ -10,7 +11,7 @@ export const dbConnection = async () => {
       useUnifiedTopology: true,      // Enables the new unified topology engine
       useCreateIndex: true
     });
-    console.log('Connected to Database');
+    log(Log.bg.blue, `Connected to Database`)
   } catch (error) {
     console.error('Error connecting to Database:', error);
   }

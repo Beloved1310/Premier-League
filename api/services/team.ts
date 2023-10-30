@@ -41,20 +41,20 @@ export const teamService = {
       queryParams.founded = parseInt(queryParams.founded)
     }
 
-    // if (typeof queryParams.countries === 'string') {
-    //   queryParams.countries = { $regex: queryParams.countries, $options: 'i' }
-    // }
-
-    if (
-      Array.isArray(queryParams.countries) ||
-      typeof queryParams.countries === 'string'
-    ) {
-      const countries = Array.isArray(queryParams.countries)
-        ? queryParams.countries
-        : [queryParams.countries]
-
-      queryParams.country = { $in: countries }
+    if (typeof queryParams.countries === 'string') {
+      queryParams.countries = { $regex: queryParams.countries, $options: 'i' }
     }
+
+    // if (
+    //   Array.isArray(queryParams.countries) ||
+    //   typeof queryParams.countries === 'string'
+    // ) {
+    //   const countries = Array.isArray(queryParams.countries)
+    //     ? queryParams.countries
+    //     : [queryParams.countries]
+
+    //   queryParams.country = { $in: countries }
+    // }
 
     const listTeams = await teamRepository.listTeams(queryParams)
     return listTeams

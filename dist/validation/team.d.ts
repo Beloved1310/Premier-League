@@ -1,4 +1,1 @@
-export declare const teamValidation: {
-    create: any;
-    update: any;
-};
+export declare const teamValidation: any;
