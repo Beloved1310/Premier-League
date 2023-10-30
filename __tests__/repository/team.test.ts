@@ -46,26 +46,4 @@ describe('teamRepository', () => {
     const result = await teamRepository.deleteTeam('sampleCode');
     expect(result).toEqual({ deletedCount: 1 });
   });
-
-//  it('listTeams should return teams and meta information', async () => {
-//     const queryParams = { name : sampleTeam.name };
-//     const teams = [sampleTeam];
-//     const total = 1;
-
-//     (Team.find as jest.Mock).mockResolvedValue(teams);
-//     (Team.countDocuments as jest.Mock).mockResolvedValue(total);
-
-//     const result = await teamRepository.listTeams(queryParams);
-
-//     expect(result).toEqual({
-//       team: teams,
-//       meta: {
-//         total,
-//         page: 1,
-//         perPage: 10
-//         hasMore: false,
-//         nextPage: null,
-//       },
-//     });
-//   });
 });

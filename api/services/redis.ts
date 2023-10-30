@@ -1,4 +1,3 @@
-import Redis from 'ioredis'
 import { createClient } from 'redis'
 import { log, Log } from '../utilis/logger'
 import { config } from '../config'
