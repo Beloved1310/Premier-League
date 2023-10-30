@@ -1,5 +1,4 @@
 import Team, { ITeam }  from '../../api/model/team';
-// import { ITeam } from '../../api/model/team';
 import { teamRepository } from '../../api/repositories/team';
 
 jest.mock('../../api/model/team', () => ({

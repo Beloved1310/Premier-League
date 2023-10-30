@@ -203,8 +203,6 @@ describe('fixtureService', () => {
 
     const queryParams = {}
     const result = await fixtureService.listFixtures(queryParams)
-
-    // expect(result.fixture).toEqual(expectedFixtures);
     expect(fixtureRepository.listFixtures).toHaveBeenCalledWith(queryParams)
   })
 })

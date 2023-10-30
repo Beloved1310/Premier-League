@@ -78,11 +78,10 @@ describe('userService', () => {
     // Mock bcrypt.compare to return true for a valid password
     (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
-    const result = await userService.loginUser(loginUser);
+     await userService.loginUser(loginUser);
 
     expect(userRepository.getOneUser).toHaveBeenCalledWith(loginUser.email);
     expect(bcrypt.compare).toHaveBeenCalledWith(loginUser.password, 'hashedPassword');
-    // expect(typeof result).toBe('string');
   });
 
   it('loginUser - should throw an error for an invalid password', async () => {

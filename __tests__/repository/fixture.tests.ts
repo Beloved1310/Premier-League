@@ -21,6 +21,4 @@ describe('fixtureRepository', () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
-
-  
 })
