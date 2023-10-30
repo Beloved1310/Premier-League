@@ -13,7 +13,7 @@ export const fixtureController = {
     const data: FixtureInput = await fixtureService.createFixture(value)
     // Cache the fixture data
     // await RedisService.deleteJson(`pending-fixtures`)
-    await RedisService.setJson(`fixture:${data.code}`, data)
+    await RedisService.setJson(`fixture:${data.code}`, data, 3600)
     return ResponseService.success(res, 'Fixture Successfully Created', data)
   },
 
@@ -50,7 +50,7 @@ export const fixtureController = {
       const fixture = await fixtureService.getFixture(code)
 
       // Cache the fixture data
-      await RedisService.setJson(`fixture:${code}`, fixture)
+      await RedisService.setJson(`fixture:${code}`, fixture, 3600)
 
       return ResponseService.success(
         res,
@@ -71,7 +71,7 @@ export const fixtureController = {
       )
     } else {
       const data = await fixtureService.listPendingFixtures(queryParams)
-      await RedisService.setJson(`pending-fixtures:${cacheKey}`, data)
+      await RedisService.setJson(`pending-fixtures:${cacheKey}`, data, 3600)
       return ResponseService.success(res, 'Pending Fixtures Successfully Retrieved', data)
     }
   },
@@ -86,7 +86,7 @@ export const fixtureController = {
       )
     } else {
       const data = await fixtureService.listCompletedFixtures(queryParams)
-      await RedisService.setJson(`completed-fixtures:${cacheKey}`, data)
+      await RedisService.setJson(`completed-fixtures:${cacheKey}`, data, 3600)
       return ResponseService.success(res, 'Completed Fixtures Successfully Retrieved', data)
     }
   },
@@ -101,7 +101,7 @@ export const fixtureController = {
       )
     } else {
       const data = await fixtureService.listFixtures(queryParams)
-      await RedisService.setJson(`fixtures:${cacheKey}`, data)
+      await RedisService.setJson(`fixtures:${cacheKey}`, data, 3600)
       return ResponseService.success(res, 'Fixtures Successfully Retrieved', data)
     }
   },

@@ -44,7 +44,7 @@ export const teamController = {
       const { _id, ...data } = team.toObject()
 
       // Cache the team data
-      await RedisService.setJson(`team:${code}`, data)
+      await RedisService.setJson(`team:${code}`, data,3600)
 
       return ResponseService.success(res, 'Team Successfully Retrieved', data)
     }
@@ -67,7 +67,7 @@ export const teamController = {
       const data = await teamService.listTeams(queryParams)
 
       // Cache the list of teams
-      await RedisService.setJson(`teams:${cacheKey}`, data)
+      await RedisService.setJson(`teams:${cacheKey}`, data, 3600)
       // await RedisService.deleteJson(`teams:${cacheKey}`)
 
       return ResponseService.success(res, 'Teams Successfully Retrieved', data)
